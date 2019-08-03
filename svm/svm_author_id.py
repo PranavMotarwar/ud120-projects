@@ -12,7 +12,9 @@ import sys
 from time import time
 sys.path.append("../tools/")
 from email_preprocess import preprocess
-
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from collections import Counter
 
 ### features_train and features_test are the features for the training
 ### and testing datasets, respectively
@@ -23,8 +25,27 @@ features_train, features_test, labels_train, labels_test = preprocess()
 
 
 #########################################################
-### your code goes here ###
 
+#clf = SVC(kernel='linear')
+clf = SVC(kernel='rbf', C=10000)
+
+t0 = time()
+clf.fit(features_train, labels_train)
+print "training time:", round(time()-t0, 3), "s"
+
+t1 = time()
+pred = clf.predict(features_test)
+print "prediction time:", round(time()-t1, 3), "s"
+
+print "accuracy:", accuracy_score(labels_test, pred)
+
+print "Predictions:"
+print "10:", pred[10]
+print "26:", pred[26]
+print "50:", pred[50]
+
+c = Counter(pred)
+print "No of predictions for Chris(1):", c[1]
 #########################################################
 
 
